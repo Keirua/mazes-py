@@ -24,14 +24,12 @@ class Cell:
     def get_links(self):
         return self.links.keys()
 
-    # todo: implement
     def has_link(self, cell):
         return cell in self.links and self.links[cell]
 
-    # todo: implement
     def neighbors(self):
-        None
-
+        l = [self.north, self.south, self.west, self.east]
+        return list(filter(lambda x:x is not None, l))
 
 class Grid:
     rows = 10
@@ -101,10 +99,18 @@ class TestGridMethods(unittest.TestCase):
         self.assertIsNone(g.grid[2][3].east)
         self.assertIsNone(g.grid[2][0].west)
 
+        self.assertEqual(4, len(g.grid[1][1].neighbors()))
+        n = g.grid[0][0].neighbors()
+        self.assertEqual(2, len(n))
+        self.assertIn(g.grid[0][1], n)
+        self.assertIn(g.grid[1][0], n)
+
 
 if __name__ == '__main__':
-    # unittest.main()
+    unittest.main()
     g = Grid(4, 4)
     g.grid[1][1].link(g.grid[1][2])
     g.grid[1][1].link(g.grid[2][1])
+
     print(g.print())
+    print()
