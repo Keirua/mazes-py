@@ -1,4 +1,6 @@
-import unittest, random
+import random
+import unittest
+from PIL import Image, ImageDraw
 
 
 class Cell:
@@ -57,16 +59,26 @@ class Grid:
                 if c + 1 < self.columns:
                     self.grid[l][c].east = self.grid[l][c + 1]
 
-    def get_cell(self, l, c):
+    def get_cell(self, row, column):
+        """Return the cell at the requested coordinate"""
         # could be replaced by array access, but looks less interesting since it's 2 dimensions
-        if 0 <= l < self.rows and 0 <= c < self.columns:
-            return self.grid[l][c]
+        if 0 <= row < self.rows and 0 <= column < self.columns:
+            return self.grid[row][column]
         return None
 
     def each_cell(self):
+        """Yield all the cells of the grid"""
         for row in self.grid:
             for cell in row:
                 yield cell
+
+    def random_cell(self):
+        random_row = random.choice(self.grid)
+        return random.choice(random_row)
+
+    def size(self):
+        """The size of the grid"""
+        return self.rows * self.columns
 
     def __str__(self):
         output = "+" + "---+" * self.rows + "\n"
@@ -82,6 +94,28 @@ class Grid:
             output += top + "\n"
             output += bottom + "\n"
         return output
+
+    def save_image(self, filename, cell_size=10):
+        wall_color = (0, 0, 0)
+        background_color = (255, 255, 255)
+
+        im = Image.new("RGB", (1+self.rows * cell_size, 1+self.columns * cell_size), background_color)
+        draw = ImageDraw.Draw(im)
+        for cell in self.each_cell():
+            x1 = cell.column * cell_size
+            y1 = cell.row * cell_size
+            x2 = (cell.column + 1) * cell_size
+            y2 = (cell.row + 1) * cell_size
+            if not cell.north:
+                draw.line((x1, y1, x2, y1), fill=wall_color)
+            if not cell.west:
+                draw.line((x1, y1, x1, y2), fill=wall_color)
+            if not cell.has_link(cell.east):
+                draw.line((x2, y1, x2, y2), fill=wall_color)
+            if not cell.has_link(cell.south):
+                draw.line((x1, y2, x2, y2), fill=wall_color)
+
+        im.save(filename, "PNG")
 
 
 class BinaryTree:
@@ -130,4 +164,5 @@ if __name__ == '__main__':
 
     maze_generation_algorithm.apply_to(g)
     print(g)
+    g.save_image("maze.png",30)
     unittest.main()
