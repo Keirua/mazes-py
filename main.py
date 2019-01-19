@@ -48,16 +48,12 @@ class Grid:
             self.grid.append(line)
 
     def configure_cells(self):
-        for l in range(self.rows):
+        for r in range(self.rows):
             for c in range(self.columns):
-                if l - 1 >= 0:
-                    self.grid[l][c].north = self.grid[l - 1][c]
-                if l + 1 < self.rows:
-                    self.grid[l][c].south = self.grid[l + 1][c]
-                if c - 1 >= 0:
-                    self.grid[l][c].west = self.grid[l][c - 1]
-                if c + 1 < self.columns:
-                    self.grid[l][c].east = self.grid[l][c + 1]
+                self.grid[r][c].north = self.get_cell(r - 1, c)
+                self.grid[r][c].south = self.get_cell(r + 1, c)
+                self.grid[r][c].west = self.get_cell(r, c - 1)
+                self.grid[r][c].east = self.get_cell(r, c + 1)
 
     def get_cell(self, row, column):
         """Return the cell at the requested coordinate"""
@@ -65,6 +61,11 @@ class Grid:
         if 0 <= row < self.rows and 0 <= column < self.columns:
             return self.grid[row][column]
         return None
+
+    def each_rows(self):
+        """Yield all the rows of the grid"""
+        for row in self.grid:
+            yield row
 
     def each_cell(self):
         """Yield all the cells of the grid"""
@@ -99,7 +100,7 @@ class Grid:
         wall_color = (0, 0, 0)
         background_color = (255, 255, 255)
 
-        im = Image.new("RGB", (1+self.rows * cell_size, 1+self.columns * cell_size), background_color)
+        im = Image.new("RGB", (1 + self.rows * cell_size, 1 + self.columns * cell_size), background_color)
         draw = ImageDraw.Draw(im)
         for cell in self.each_cell():
             x1 = cell.column * cell_size
@@ -127,6 +128,27 @@ class BinaryTree:
             if len(neighbors) > 0:
                 n = random.choice(neighbors)
                 cell.link(n)
+
+
+class SideWinder:
+
+    def apply_to(self, grid: Grid):
+        for row in grid.grid:
+            run = []
+            for cell in row:
+                run.append(cell)
+
+                at_eastern_boundary = cell.east is None
+                at_northern_boundary = cell.north is None
+                should_close_out = at_eastern_boundary or (not at_northern_boundary and random.randint(0, 2) == 0)
+                if should_close_out:
+                    member = random.choice(run)
+
+                    if member.north is not None:
+                        member.link(member.north)
+                        run.clear()
+                else:
+                    cell.link(cell.east, False)
 
 
 class TestGridMethods(unittest.TestCase):
@@ -160,9 +182,10 @@ class TestGridMethods(unittest.TestCase):
 
 if __name__ == '__main__':
     maze_generation_algorithm = BinaryTree()
+    maze_generation_algorithm = SideWinder()
     g = Grid(10, 10)
 
     maze_generation_algorithm.apply_to(g)
     print(g)
-    g.save_image("maze.png",30)
+    g.save_image("maze.png", 30)
     unittest.main()
