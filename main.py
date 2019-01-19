@@ -30,10 +30,8 @@ class Cell:
 
 
 class Grid:
-    rows = 10
-    columns = 10
 
-    def __init__(self, rows, columns):
+    def __init__(self, rows=10, columns=10):
         self.rows = rows
         self.columns = columns
         self.grid = []
@@ -59,8 +57,8 @@ class Grid:
                 if c + 1 < self.columns:
                     self.grid[l][c].east = self.grid[l][c + 1]
 
-    # todo: can it be replaced by array access?
     def get_cell(self, l, c):
+        # could be replaced by array access, but looks less interesting since it's 2 dimensions
         if 0 <= l < self.rows and 0 <= c < self.columns:
             return self.grid[l][c]
         return None
@@ -70,7 +68,7 @@ class Grid:
             for cell in row:
                 yield cell
 
-    def print(self):
+    def __str__(self):
         output = "+" + "---+" * self.rows + "\n"
         for row in self.grid:
             top = "|"
@@ -86,13 +84,15 @@ class Grid:
         return output
 
 
-def binary_tree(grid:Grid):
-    """The binary tree algorithm applied to our grid"""
-    for cell in grid.each_cell():
-        neighbors = list(filter(lambda x: x is not None, [cell.north, cell.east]))
-        if len(neighbors) > 0:
-            n = random.choice(neighbors)
-            cell.link(n)
+class BinaryTree:
+
+    def apply_to(self, grid: Grid):
+        """The binary tree algorithm applied to our grid"""
+        for cell in grid.each_cell():
+            neighbors = list(filter(lambda x: x is not None, [cell.north, cell.east]))
+            if len(neighbors) > 0:
+                n = random.choice(neighbors)
+                cell.link(n)
 
 
 class TestGridMethods(unittest.TestCase):
@@ -125,8 +125,9 @@ class TestGridMethods(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    g = Grid(4, 4)
+    maze_generation_algorithm = BinaryTree()
+    g = Grid(10, 10)
 
-    binary_tree(g)
-    print(g.print())
+    maze_generation_algorithm.apply_to(g)
+    print(g)
     unittest.main()
