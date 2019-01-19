@@ -11,14 +11,14 @@ class Cell:
         self.east = None
         self.links = {}
 
-    def link(self, cell, bidir=True):
+    def link(self, cell, bidirectional=True):
         self.links[cell] = True
-        if bidir:
+        if bidirectional:
             cell.link(self, False)
 
-    def unlink(self, cell, bidir=True):
+    def unlink(self, cell, bidirectional=True):
         self.links[cell] = False
-        if bidir:
+        if bidirectional:
             cell.unlink(self, False)
 
     def get_links(self):
@@ -26,7 +26,7 @@ class Cell:
 
     # todo: implement
     def has_link(self, cell):
-        None
+        return cell in self.links and self.links[cell]
 
     # todo: implement
     def neighbors(self):
@@ -70,12 +70,20 @@ class Grid:
         return None
 
     def print(self):
-        None
+        output = "+" + "---+" * self.rows + "\n"
+        for row in self.grid:
+            top = "|"
+            bottom = "+"
+            for cell in row:
+                body = " " * 3
+                east_boundary = " " if cell.has_link(cell.east) else "|"
+                top += body + east_boundary
+                south_boundary = " " * 3 if cell.has_link(cell.south) else "-" * 3
+                bottom += south_boundary + "+"
+            output += top + "\n"
+            output += bottom + "\n"
+        return output
 
-
-c1 = Cell(1, 2)
-c2 = Cell(1, 3)
-c1.link(c2, True)
 
 class TestGridMethods(unittest.TestCase):
 
@@ -95,4 +103,8 @@ class TestGridMethods(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    # unittest.main()
+    g = Grid(4, 4)
+    g.grid[1][1].link(g.grid[1][2])
+    g.grid[1][1].link(g.grid[2][1])
+    print(g.print())
