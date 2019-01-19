@@ -1,4 +1,4 @@
-import unittest
+import unittest, random
 
 
 class Cell:
@@ -21,15 +21,13 @@ class Cell:
         if bidirectional:
             cell.unlink(self, False)
 
-    def get_links(self):
-        return self.links.keys()
-
     def has_link(self, cell):
         return cell in self.links and self.links[cell]
 
     def neighbors(self):
         l = [self.north, self.south, self.west, self.east]
-        return list(filter(lambda x:x is not None, l))
+        return list(filter(lambda x: x is not None, l))
+
 
 class Grid:
     rows = 10
@@ -67,6 +65,11 @@ class Grid:
             return self.grid[l][c]
         return None
 
+    def each_cell(self):
+        for row in self.grid:
+            for cell in row:
+                yield cell
+
     def print(self):
         output = "+" + "---+" * self.rows + "\n"
         for row in self.grid:
@@ -81,6 +84,15 @@ class Grid:
             output += top + "\n"
             output += bottom + "\n"
         return output
+
+
+def binary_tree(grid:Grid):
+    """The binary tree algorithm applied to our grid"""
+    for cell in grid.each_cell():
+        neighbors = list(filter(lambda x: x is not None, [cell.north, cell.east]))
+        if len(neighbors) > 0:
+            n = random.choice(neighbors)
+            cell.link(n)
 
 
 class TestGridMethods(unittest.TestCase):
@@ -105,12 +117,16 @@ class TestGridMethods(unittest.TestCase):
         self.assertIn(g.grid[0][1], n)
         self.assertIn(g.grid[1][0], n)
 
+        self.assertFalse(g.grid[1][1].has_link(g.grid[1][2]))
+        self.assertEqual(0, len(g.grid[1][1].links))
+        g.grid[1][1].link(g.grid[1][2])
+        self.assertTrue(g.grid[1][1].has_link(g.grid[1][2]))
+        self.assertEqual(1, len(g.grid[1][1].links))
+
 
 if __name__ == '__main__':
-    unittest.main()
     g = Grid(4, 4)
-    g.grid[1][1].link(g.grid[1][2])
-    g.grid[1][1].link(g.grid[2][1])
 
+    binary_tree(g)
     print(g.print())
-    print()
+    unittest.main()
