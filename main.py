@@ -1,13 +1,14 @@
 from formatter import ImageFormatter, StringFormatter
 from grid import Grid, DistanceGrid
-from maze_generation import SideWinder, AldousBroder, Wilson, HuntAndKill
+from maze_generation import SideWinder, AldousBroder, Wilson, HuntAndKill, RecursiveBacktracker
 
 if __name__ == '__main__':
     # maze_generation_algorithm = BinaryTree()
     # maze_generation_algorithm = SideWinder()
     # maze_generation_algorithm = AldousBroder()
     # maze_generation_algorithm = Wilson()
-    maze_generation_algorithm = HuntAndKill()
+    # maze_generation_algorithm = HuntAndKill()
+    maze_generation_algorithm = RecursiveBacktracker()
     rows = 12
     columns = 12
     g = DistanceGrid(rows, columns)

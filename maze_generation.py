@@ -95,3 +95,21 @@ class HuntAndKill(MazeGenerationAlgorithm):
                         neighbor = random.choice(visited_neighbors)
                         current.link(neighbor)
                         break
+
+
+class RecursiveBacktracker(MazeGenerationAlgorithm):
+    """aka depth first search"""
+
+    def apply_to(self, grid: Grid):
+        current = grid.random_cell()
+        stack = [current]
+
+        while len(stack) > 0:
+            current = stack[-1]
+            neighbors = list(filter(lambda x: len(x.links.keys()) == 0, current.neighbors()))
+            if len(neighbors) == 0:
+                stack.pop()
+            else:
+                neighbor = random.choice(neighbors)
+                current.link(neighbor)
+                stack.append(neighbor)
