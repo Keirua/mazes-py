@@ -3,6 +3,22 @@ import unittest
 from PIL import Image, ImageDraw
 
 
+class Distances:
+
+    def __init__(self, root_node):
+        self.root = root_node
+        self.cells = {
+            self.root: 0
+        }
+
+    def __getitem__(self, item):
+        return self.cells[item]
+
+    def __setitem__(self, key, value):
+        self.cells[key] = value
+
+
+
 class Cell:
     def __init__(self, row, column):
         self.row = row
@@ -29,6 +45,22 @@ class Cell:
     def neighbors(self):
         l = [self.north, self.south, self.west, self.east]
         return list(filter(lambda x: x is not None, l))
+
+    def compute_distances(self):
+        distances = Distances(self)
+        frontier = [self]
+
+        while len(frontier) > 0:
+            new_frontier = []
+            for cell in frontier:
+                for linked in cell.links.keys():
+                    if linked in distances.cells:
+                        continue
+                    distances[linked] = distances[cell] + 1
+                    new_frontier.append(linked)
+
+            frontier = new_frontier
+        self.distances = distances
 
 
 class Grid:
@@ -83,7 +115,7 @@ class Grid:
 
     def __str__(self):
         output = "+" + "---+" * self.rows + "\n"
-        for row in self.grid:
+        for row in self.each_rows():
             top = "|"
             bottom = "+"
             for cell in row:
@@ -179,9 +211,20 @@ class TestGridMethods(unittest.TestCase):
         self.assertTrue(g.grid[1][1].has_link(g.grid[1][2]))
         self.assertEqual(1, len(g.grid[1][1].links))
 
+    def test_distances(self):
+        g = Grid(4, 4)
+        g.grid[0][0].link(g.grid[0][1])
+        g.grid[0][1].link(g.grid[1][1])
+        g.grid[0][0].compute_distances()
+        self.assertEqual(g.grid[0][0].distances[g.grid[0][0]], 0)
+        self.assertEqual(g.grid[0][0].distances[g.grid[0][1]], 1)
+        self.assertEqual(g.grid[0][0].distances[g.grid[1][1]], 2)
+        self.assertTrue(g.grid[2][3] not in g.grid[0][0].distances.cells.keys())
+
+
 
 if __name__ == '__main__':
-    maze_generation_algorithm = BinaryTree()
+    # maze_generation_algorithm = BinaryTree()
     maze_generation_algorithm = SideWinder()
     g = Grid(10, 10)
 
