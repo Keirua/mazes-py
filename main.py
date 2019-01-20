@@ -1,10 +1,11 @@
 from formatter import ImageFormatter, StringFormatter
 from grid import Grid, DistanceGrid
-from maze_generation import SideWinder
+from maze_generation import SideWinder, AldousBroder
 
 if __name__ == '__main__':
     # maze_generation_algorithm = BinaryTree()
-    maze_generation_algorithm = SideWinder()
+    # maze_generation_algorithm = SideWinder()
+    maze_generation_algorithm = AldousBroder()
     rows = 12
     columns = 12
     g = DistanceGrid(rows, columns)

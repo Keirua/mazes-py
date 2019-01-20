@@ -1,11 +1,13 @@
 import random
 
 from grid import Grid
+from abc import ABC, abstractmethod
 
 
-class MazeGenerationAlgorithm:
-    def apply_to(self):
-        None
+class MazeGenerationAlgorithm(ABC):
+    @abstractmethod
+    def apply_to(self, grid: Grid):
+        pass
 
 
 class BinaryTree(MazeGenerationAlgorithm):
@@ -38,3 +40,16 @@ class SideWinder(MazeGenerationAlgorithm):
                         run.clear()
                 else:
                     cell.link(cell.east)
+
+
+class AldousBroder(MazeGenerationAlgorithm):
+
+    def apply_to(self, grid: Grid):
+        cell = grid.random_cell()
+        unvisited_count = grid.size() - 1
+        while unvisited_count > 0:
+            neighbor = random.choice(cell.neighbors())
+            if len(neighbor.links.keys()) == 0:
+                cell.link(neighbor)
+                unvisited_count -= 1
+            cell = neighbor
