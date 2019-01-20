@@ -1,18 +1,19 @@
 from formatter import ImageFormatter, StringFormatter
 from grid import Grid, DistanceGrid
-from maze_generation import SideWinder, AldousBroder, Wilson
+from maze_generation import SideWinder, AldousBroder, Wilson, HuntAndKill
 
 if __name__ == '__main__':
     # maze_generation_algorithm = BinaryTree()
     # maze_generation_algorithm = SideWinder()
     # maze_generation_algorithm = AldousBroder()
-    maze_generation_algorithm = Wilson()
-    rows = 30
-    columns = 30
+    # maze_generation_algorithm = Wilson()
+    maze_generation_algorithm = HuntAndKill()
+    rows = 12
+    columns = 12
     g = DistanceGrid(rows, columns)
 
     maze_generation_algorithm.apply_to(g)
-    g.distances = g.grid[rows//2][columns//2].compute_distances()
+    g.distances = g.random_cell().compute_distances()
     g.distances.compute_max()
 
     print(StringFormatter.to_string(g))

@@ -67,10 +67,31 @@ class Wilson(MazeGenerationAlgorithm):
             while cell in unvisited:
                 cell = random.choice(cell.neighbors())
                 if cell in path:
-                    path = path[0:path.index(cell)+1]
+                    path = path[0:path.index(cell) + 1]
                 else:
                     path.append(cell)
 
             for i in range(0, len(path) - 1):
                 path[i].link(path[i + 1])
                 unvisited.remove(path[i])
+
+
+class HuntAndKill(MazeGenerationAlgorithm):
+    def apply_to(self, grid: Grid):
+        current = grid.random_cell()
+        while current is not None:
+            unvisited_neighbors = list(filter(lambda x: len(x.links.keys()) == 0, current.neighbors()))
+
+            if len(unvisited_neighbors) > 0:
+                neighbor = random.choice(unvisited_neighbors)
+                current.link(neighbor)
+                current = neighbor
+            else:
+                current = None
+                for cell in grid.each_cell():
+                    visited_neighbors = list(filter(lambda x: len(x.links.keys()) != 0, cell.neighbors()))
+                    if len(cell.links) == 0 and len(visited_neighbors) > 0:
+                        current = cell
+                        neighbor = random.choice(visited_neighbors)
+                        current.link(neighbor)
+                        break
