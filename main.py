@@ -2,6 +2,8 @@ import random
 import unittest
 from PIL import Image, ImageDraw
 
+from maze_generation import SideWinder, BinaryTree
+
 
 class Distances:
 
@@ -16,7 +18,6 @@ class Distances:
 
     def __setitem__(self, key, value):
         self.cells[key] = value
-
 
 
 class Cell:
@@ -151,36 +152,6 @@ class Grid:
         im.save(filename, "PNG")
 
 
-class BinaryTree:
-
-    def apply_to(self, grid: Grid):
-        """The binary tree algorithm applied to our grid"""
-        for cell in grid.each_cell():
-            neighbors = list(filter(lambda x: x is not None, [cell.north, cell.east]))
-            if len(neighbors) > 0:
-                n = random.choice(neighbors)
-                cell.link(n)
-
-
-class SideWinder:
-
-    def apply_to(self, grid: Grid):
-        for row in grid.grid:
-            run = []
-            for cell in row:
-                run.append(cell)
-
-                at_eastern_boundary = cell.east is None
-                at_northern_boundary = cell.north is None
-                should_close_out = at_eastern_boundary or (not at_northern_boundary and random.randint(0, 2) == 0)
-                if should_close_out:
-                    member = random.choice(run)
-
-                    if member.north is not None:
-                        member.link(member.north)
-                        run.clear()
-                else:
-                    cell.link(cell.east, False)
 
 
 class TestGridMethods(unittest.TestCase):
@@ -220,7 +191,6 @@ class TestGridMethods(unittest.TestCase):
         self.assertEqual(g.grid[0][0].distances[g.grid[0][1]], 1)
         self.assertEqual(g.grid[0][0].distances[g.grid[1][1]], 2)
         self.assertTrue(g.grid[2][3] not in g.grid[0][0].distances.cells.keys())
-
 
 
 if __name__ == '__main__':
