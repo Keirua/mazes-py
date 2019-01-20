@@ -150,6 +150,13 @@ class Grid:
         """The size of the grid"""
         return self.rows * self.columns
 
+    def deadends(self):
+        deadend_list = []
+        for cell in self.each_cell():
+            if len(cell.links.keys()) == 1:
+                deadend_list.append(cell)
+        return deadend_list
+
 
 class DistanceGrid(Grid):
     def __init__(self, rows=10, columns=10):
