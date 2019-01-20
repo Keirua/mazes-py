@@ -26,7 +26,20 @@ class Distances:
                     breadcrumbs[neighbor] = self.cells[neighbor]
                     current = neighbor
 
+        breadcrumbs.compute_max()
         return breadcrumbs
+
+    def compute_max(self):
+        """returns the furthest and the longest distances found"""
+        max_distance = 0
+        max_cell = self.root
+        for cell, distance in self.cells.items():
+            if distance > max_distance:
+                max_distance = distance
+                max_cell = cell
+
+        self.max_distance = max_distance
+        self.max_cell = max_cell
 
 
 class Cell:
@@ -38,6 +51,14 @@ class Cell:
         self.west = None
         self.east = None
         self.links = {}
+
+    def get_bounding_box(self, cell_size):
+        x1 = self.column * cell_size
+        y1 = self.row * cell_size
+        x2 = (self.column + 1) * cell_size
+        y2 = (self.row + 1) * cell_size
+
+        return x1, y1, x2, y2
 
     def link(self, cell, bidirectional=True):
         self.links[cell] = True
@@ -107,6 +128,9 @@ class Grid:
     def content_of(self, cell):
         return " "
 
+    def background_color(self, cell):
+        return None
+
     def each_rows(self):
         """Yield all the rows of the grid"""
         for row in self.grid:
@@ -137,3 +161,12 @@ class DistanceGrid(Grid):
             return self.distances[cell]
 
         return super().content_of(cell)
+
+    def background_color(self, cell):
+        if cell not in self.distances.cells.keys():
+            return None
+        distance = self.distances[cell]
+        intensity = (self.distances.max_distance - distance) / float(self.distances.max_distance)
+        dark = int(255 * intensity)
+        bright = int(128 + 127 * intensity)
+        return [dark, bright, dark]

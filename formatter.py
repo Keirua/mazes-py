@@ -38,11 +38,18 @@ class ImageFormatter:
 
         im = Image.new("RGB", (1 + grid.rows * cell_size, 1 + grid.columns * cell_size), background_color)
         draw = ImageDraw.Draw(im)
+        # First we draw the background
         for cell in grid.each_cell():
-            x1 = cell.column * cell_size
-            y1 = cell.row * cell_size
-            x2 = (cell.column + 1) * cell_size
-            y2 = (cell.row + 1) * cell_size
+            x1, y1, x2, y2 = cell.get_bounding_box(cell_size)
+
+            cell_bg = grid.background_color(cell)
+            if cell_bg is not None:
+                draw.rectangle((x1, y1, x2, y2), fill=tuple(cell_bg))
+
+        # Then we draw the cell borders and content
+        for cell in grid.each_cell():
+            x1, y1, x2, y2 = cell.get_bounding_box(cell_size)
+
             if not cell.north:
                 draw.line((x1, y1, x2, y1), fill=wall_color)
             if not cell.west:
