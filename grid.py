@@ -91,6 +91,9 @@ class Grid:
             return self.grid[row][column]
         return None
 
+    def content_of(self, cell):
+        return " "
+
     def each_rows(self):
         """Yield all the rows of the grid"""
         for row in self.grid:
@@ -109,3 +112,20 @@ class Grid:
     def size(self):
         """The size of the grid"""
         return self.rows * self.columns
+
+
+class DistanceGrid(Grid):
+    def __init__(self, rows=10, columns=10):
+        super().__init__(rows, columns)
+        self.distances = None
+
+    def content_of(self, cell):
+        # taken here
+        # http://code.activestate.com/recipes/65212/
+        def baseN(num, b, numerals="0123456789abcdefghijklmnopqrstuvwxyz"):
+            return ((num == 0) and "0") or (baseN(num // b, b).lstrip("0") + numerals[num % b])
+
+        if self.distances is not None and cell in self.distances.cells.keys():
+            return baseN(self.distances[cell], 36)
+
+        return super().content_of(cell)

@@ -37,4 +37,4 @@ class SideWinder(MazeGenerationAlgorithm):
                         member.link(member.north)
                         run.clear()
                 else:
-                    cell.link(cell.east, False)
+                    cell.link(cell.east)
