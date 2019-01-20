@@ -1,5 +1,8 @@
 import random
 
+from grid import Grid
+
+
 class MazeGenerationAlgorithm:
     def apply_to(self):
         None
