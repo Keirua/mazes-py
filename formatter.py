@@ -2,6 +2,13 @@ from grid import Grid
 from PIL import Image, ImageDraw
 
 
+# taken here
+# http://code.activestate.com/recipes/65212/
+def baseN(num, b, numerals="0123456789abcdefghijklmnopqrstuvwxyz"):
+    if num == " ":
+        return " "
+    return ((num == 0) and "0") or (baseN(num // b, b).lstrip("0") + numerals[num % b])
+
 class StringFormatter:
     @staticmethod
     def to_string(grid: Grid):
@@ -10,7 +17,8 @@ class StringFormatter:
             top = "|"
             bottom = "+"
             for cell in row:
-                body = " {} ".format(grid.content_of(cell))
+                v = grid.content_of(cell)
+                body = " {} ".format(baseN(v, 36))
                 east_boundary = " " if cell.has_link(cell.east) else "|"
                 top += body + east_boundary
                 south_boundary = " " * 3 if cell.has_link(cell.south) else "-" * 3
@@ -43,6 +51,6 @@ class ImageFormatter:
                 draw.line((x2, y1, x2, y2), fill=wall_color)
             if not cell.has_link(cell.south):
                 draw.line((x1, y2, x2, y2), fill=wall_color)
-            draw.text((x1 + cell_size/2, y1+ cell_size/2), grid.content_of(cell), fill=wall_color)
+            draw.text((x1 + cell_size/2, y1+ cell_size/2), str(grid.content_of(cell)), fill=wall_color)
 
         im.save(filename, "PNG")

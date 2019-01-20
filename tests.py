@@ -35,11 +35,11 @@ class TestGridMethods(unittest.TestCase):
         g = Grid(4, 4)
         g.grid[0][0].link(g.grid[0][1])
         g.grid[0][1].link(g.grid[1][1])
-        g.grid[0][0].compute_distances()
-        self.assertEqual(g.grid[0][0].distances[g.grid[0][0]], 0)
-        self.assertEqual(g.grid[0][0].distances[g.grid[0][1]], 1)
-        self.assertEqual(g.grid[0][0].distances[g.grid[1][1]], 2)
-        self.assertTrue(g.grid[2][3] not in g.grid[0][0].distances.cells.keys())
+        distances = g.grid[0][0].compute_distances()
+        self.assertEqual(distances[g.grid[0][0]], 0)
+        self.assertEqual(distances[g.grid[0][1]], 1)
+        self.assertEqual(distances[g.grid[1][1]], 2)
+        self.assertTrue(g.grid[2][3] not in distances.cells.keys())
 
 
 if __name__ == '__main__':

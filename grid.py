@@ -15,6 +15,19 @@ class Distances:
     def __setitem__(self, key, value):
         self.cells[key] = value
 
+    def path_to(self, goal):
+        current = goal
+        breadcrumbs = Distances(self.root)
+        breadcrumbs[current] = self.cells[current]
+
+        while current != self.root:
+            for neighbor in current.links:
+                if self.cells[neighbor] < self.cells[current]:
+                    breadcrumbs[neighbor] = self.cells[neighbor]
+                    current = neighbor
+
+        return breadcrumbs
+
 
 class Cell:
     def __init__(self, row, column):
@@ -57,7 +70,7 @@ class Cell:
                     new_frontier.append(linked)
 
             frontier = new_frontier
-        self.distances = distances
+        return distances
 
 
 class Grid:
@@ -120,12 +133,7 @@ class DistanceGrid(Grid):
         self.distances = None
 
     def content_of(self, cell):
-        # taken here
-        # http://code.activestate.com/recipes/65212/
-        def baseN(num, b, numerals="0123456789abcdefghijklmnopqrstuvwxyz"):
-            return ((num == 0) and "0") or (baseN(num // b, b).lstrip("0") + numerals[num % b])
-
         if self.distances is not None and cell in self.distances.cells.keys():
-            return baseN(self.distances[cell], 36)
+            return self.distances[cell]
 
         return super().content_of(cell)
