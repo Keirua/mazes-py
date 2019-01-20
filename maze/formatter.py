@@ -9,6 +9,7 @@ def baseN(num, b, numerals="0123456789abcdefghijklmnopqrstuvwxyz"):
         return " "
     return ((num == 0) and "0") or (baseN(num // b, b).lstrip("0") + numerals[num % b])
 
+
 class StringFormatter:
     @staticmethod
     def to_string(grid: Grid):
@@ -19,9 +20,10 @@ class StringFormatter:
             for cell in row:
                 v = grid.content_of(cell)
                 body = " {} ".format(baseN(v, 36))
-                east_boundary = " " if cell.has_link(cell.east) else "|"
+
+                east_boundary = " " if cell is not None and cell.has_link(cell.east) else "|"
+                south_boundary = " " * 3 if cell is not None and cell.has_link(cell.south) else "-" * 3
                 top += body + east_boundary
-                south_boundary = " " * 3 if cell.has_link(cell.south) else "-" * 3
                 bottom += south_boundary + "+"
             output += top + "\n"
             output += bottom + "\n"
@@ -32,7 +34,7 @@ class StringFormatter:
 class ImageFormatter:
 
     @staticmethod
-    def save_image(grid:Grid, filename, cell_size=10):
+    def save_image(grid: Grid, filename, cell_size=10):
         wall_color = (0, 0, 0)
         background_color = (255, 255, 255)
 
@@ -62,7 +64,7 @@ class ImageFormatter:
                 draw.line((x1, y2, x2, y2), fill=wall_color)
 
             text_width, text_height = draw.textsize(str(grid.content_of(cell)))
-            text_coords = (x1 + cell_size/2 - text_width/2, y1+ cell_size/2 - text_height/2)
+            text_coords = (x1 + cell_size / 2 - text_width / 2, y1 + cell_size / 2 - text_height / 2)
             draw.text(text_coords, str(grid.content_of(cell)), fill=wall_color)
 
         im.save(filename, "PNG")

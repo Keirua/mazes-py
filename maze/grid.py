@@ -113,10 +113,11 @@ class Grid:
     def configure_cells(self):
         for r in range(self.rows):
             for c in range(self.columns):
-                self.grid[r][c].north = self.get_cell(r - 1, c)
-                self.grid[r][c].south = self.get_cell(r + 1, c)
-                self.grid[r][c].west = self.get_cell(r, c - 1)
-                self.grid[r][c].east = self.get_cell(r, c + 1)
+                if self.grid[r][c] is not None:
+                    self.grid[r][c].north = self.get_cell(r - 1, c)
+                    self.grid[r][c].south = self.get_cell(r + 1, c)
+                    self.grid[r][c].west = self.get_cell(r, c - 1)
+                    self.grid[r][c].east = self.get_cell(r, c + 1)
 
     def get_cell(self, row, column):
         """Return the cell at the requested coordinate"""
@@ -140,7 +141,8 @@ class Grid:
         """Yield all the cells of the grid"""
         for row in self.grid:
             for cell in row:
-                yield cell
+                if cell is not None:
+                    yield cell
 
     def random_cell(self):
         random_row = random.choice(self.grid)
