@@ -1,5 +1,5 @@
 from grid import Grid
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 
 # taken here
@@ -38,6 +38,8 @@ class ImageFormatter:
 
         im = Image.new("RGB", (1 + grid.rows * cell_size, 1 + grid.columns * cell_size), background_color)
         draw = ImageDraw.Draw(im)
+        # font = ImageFont.load_default()
+
         # First we draw the background
         for cell in grid.each_cell():
             x1, y1, x2, y2 = cell.get_bounding_box(cell_size)
@@ -58,6 +60,9 @@ class ImageFormatter:
                 draw.line((x2, y1, x2, y2), fill=wall_color)
             if not cell.has_link(cell.south):
                 draw.line((x1, y2, x2, y2), fill=wall_color)
-            draw.text((x1 + cell_size/2, y1+ cell_size/2), str(grid.content_of(cell)), fill=wall_color)
+
+            text_width, text_height = draw.textsize(str(grid.content_of(cell)))
+            text_coords = (x1 + cell_size/2 - text_width/2, y1+ cell_size/2 - text_height/2)
+            draw.text(text_coords, str(grid.content_of(cell)), fill=wall_color)
 
         im.save(filename, "PNG")

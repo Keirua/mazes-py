@@ -7,8 +7,8 @@ if __name__ == '__main__':
     # maze_generation_algorithm = SideWinder()
     # maze_generation_algorithm = AldousBroder()
     maze_generation_algorithm = Wilson()
-    rows = 12
-    columns = 12
+    rows = 30
+    columns = 30
     g = DistanceGrid(rows, columns)
 
     maze_generation_algorithm.apply_to(g)
