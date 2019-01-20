@@ -1,5 +1,5 @@
-from grid import Grid
-from PIL import Image, ImageDraw, ImageFont
+from maze.grid import Grid
+from PIL import Image, ImageDraw
 
 
 # taken here

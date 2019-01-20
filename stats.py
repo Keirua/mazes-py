@@ -1,5 +1,5 @@
-from grid import Grid
-from maze_generation import SideWinder, AldousBroder, Wilson, HuntAndKill, BinaryTree
+from maze.grid import Grid
+from maze.maze_generation import SideWinder, AldousBroder, Wilson, HuntAndKill, BinaryTree
 import math
 from collections import OrderedDict
 

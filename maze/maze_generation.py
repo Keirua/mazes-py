@@ -1,6 +1,6 @@
 import random
 
-from grid import Grid
+from maze.grid import Grid
 from abc import ABC, abstractmethod
 
 

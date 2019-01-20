@@ -1,6 +1,6 @@
-from formatter import ImageFormatter, StringFormatter
-from grid import Grid, DistanceGrid
-from maze_generation import SideWinder, AldousBroder, Wilson, HuntAndKill, RecursiveBacktracker
+from maze.formatter import ImageFormatter, StringFormatter
+from maze.grid import DistanceGrid
+from maze.maze_generation import RecursiveBacktracker
 
 if __name__ == '__main__':
     # maze_generation_algorithm = BinaryTree()
