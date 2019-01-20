@@ -53,3 +53,24 @@ class AldousBroder(MazeGenerationAlgorithm):
                 cell.link(neighbor)
                 unvisited_count -= 1
             cell = neighbor
+
+
+class Wilson(MazeGenerationAlgorithm):
+    def apply_to(self, grid: Grid):
+        unvisited = [cell for cell in grid.each_cell()]
+        first_cell = random.choice(unvisited)
+        unvisited.remove(first_cell)
+
+        while len(unvisited) > 0:
+            cell = random.choice(unvisited)
+            path = [cell]
+            while cell in unvisited:
+                cell = random.choice(cell.neighbors())
+                if cell in path:
+                    path = path[0:path.index(cell)+1]
+                else:
+                    path.append(cell)
+
+            for i in range(0, len(path) - 1):
+                path[i].link(path[i + 1])
+                unvisited.remove(path[i])
