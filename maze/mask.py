@@ -1,6 +1,6 @@
 import random
 
-from maze.rectangulargrid import RectangularGrid, Cell, RectangularCell
+from maze.grid import RectangularGrid, Cell, RectangularCell
 from PIL import Image
 
 class Mask:

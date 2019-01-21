@@ -1,4 +1,4 @@
-from maze.rectangulargrid import RectangularGrid
+from maze.grid import RectangularGrid
 from maze.maze_generation import SideWinder, AldousBroder, Wilson, HuntAndKill, BinaryTree
 import math
 from collections import OrderedDict

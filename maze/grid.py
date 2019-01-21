@@ -1,46 +1,7 @@
 import random
 from abc import ABC, abstractmethod
 
-
-class Distances:
-
-    def __init__(self, root_node):
-        self.root = root_node
-        self.cells = {
-            self.root: 0
-        }
-
-    def __getitem__(self, item):
-        return self.cells[item]
-
-    def __setitem__(self, key, value):
-        self.cells[key] = value
-
-    def path_to(self, goal):
-        current = goal
-        breadcrumbs = Distances(self.root)
-        breadcrumbs[current] = self.cells[current]
-
-        while current != self.root:
-            for neighbor in current.links:
-                if self.cells[neighbor] < self.cells[current]:
-                    breadcrumbs[neighbor] = self.cells[neighbor]
-                    current = neighbor
-
-        breadcrumbs.compute_max()
-        return breadcrumbs
-
-    def compute_max(self):
-        """returns the furthest and the longest distances found"""
-        max_distance = 0
-        max_cell = self.root
-        for cell, distance in self.cells.items():
-            if distance > max_distance:
-                max_distance = distance
-                max_cell = cell
-
-        self.max_distance = max_distance
-        self.max_cell = max_cell
+from maze.distance import Distances
 
 
 class Cell(ABC):
@@ -48,14 +9,6 @@ class Cell(ABC):
         self.row = row
         self.column = column
         self.links = {}
-
-    def get_bounding_box(self, cell_size):
-        x1 = self.column * cell_size
-        y1 = self.row * cell_size
-        x2 = (self.column + 1) * cell_size
-        y2 = (self.row + 1) * cell_size
-
-        return x1, y1, x2, y2
 
     def link(self, cell, bidirectional=True):
         self.links[cell] = True
@@ -72,6 +25,10 @@ class Cell(ABC):
 
     @abstractmethod
     def neighbors(self):
+        pass
+
+    @abstractmethod
+    def get_bounding_box(self, cell_size):
         pass
 
     def compute_distances(self):
@@ -104,8 +61,39 @@ class RectangularCell(Cell):
         neighbor_list = [self.north, self.south, self.west, self.east]
         return list(filter(lambda x: x is not None, neighbor_list))
 
+    def get_bounding_box(self, cell_size):
+        x1 = self.column * cell_size
+        y1 = self.row * cell_size
+        x2 = (self.column + 1) * cell_size
+        y2 = (self.row + 1) * cell_size
 
-class RectangularGrid:
+        return x1, y1, x2, y2
+
+class PolarCell(Cell):
+
+    def __init__(self, row, column):
+        super().__init__(row, column)
+        self.outwards = []
+        self.cw = None
+        self.ccw = None
+        self.inward = None
+
+    def neighbors(self):
+        neighbor_list = [self.inward, self.ccw, self.cw] + self.outwards
+        return list(filter(lambda x: x is not None, neighbor_list))
+
+    # todo: refactor
+    def get_bounding_box(self, cell_size):
+        x1 = self.column * cell_size
+        y1 = self.row * cell_size
+        x2 = (self.column + 1) * cell_size
+        y2 = (self.row + 1) * cell_size
+
+        return x1, y1, x2, y2
+
+
+
+class Grid(ABC):
 
     def __init__(self, rows=10, columns=10):
         self.rows = rows
@@ -114,21 +102,13 @@ class RectangularGrid:
         self.prepare_grid()
         self.configure_cells()
 
+    @abstractmethod
     def prepare_grid(self):
-        for l in range(self.rows):
-            line = []
-            for c in range(self.columns):
-                line.append(RectangularCell(l, c))
-            self.grid.append(line)
+        pass
 
+    @abstractmethod
     def configure_cells(self):
-        for r in range(self.rows):
-            for c in range(self.columns):
-                if self.grid[r][c] is not None:
-                    self.grid[r][c].north = self.get_cell(r - 1, c)
-                    self.grid[r][c].south = self.get_cell(r + 1, c)
-                    self.grid[r][c].west = self.get_cell(r, c - 1)
-                    self.grid[r][c].east = self.get_cell(r, c + 1)
+        pass
 
     def get_cell(self, row, column):
         """Return the cell at the requested coordinate"""
@@ -173,6 +153,31 @@ class RectangularGrid:
                 deadend_list.append(cell)
         return deadend_list
 
+class RectangularGrid(Grid):
+
+    def __init__(self, rows=10, columns=10):
+        self.rows = rows
+        self.columns = columns
+        self.grid = []
+        self.prepare_grid()
+        self.configure_cells()
+
+    def prepare_grid(self):
+        for l in range(self.rows):
+            line = []
+            for c in range(self.columns):
+                line.append(RectangularCell(l, c))
+            self.grid.append(line)
+
+    def configure_cells(self):
+        for r in range(self.rows):
+            for c in range(self.columns):
+                if self.grid[r][c] is not None:
+                    self.grid[r][c].north = self.get_cell(r - 1, c)
+                    self.grid[r][c].south = self.get_cell(r + 1, c)
+                    self.grid[r][c].west = self.get_cell(r, c - 1)
+                    self.grid[r][c].east = self.get_cell(r, c + 1)
+
 
 class DistanceGrid(RectangularGrid):
     def __init__(self, rows=10, columns=10):
@@ -195,3 +200,10 @@ class DistanceGrid(RectangularGrid):
         return [dark, bright, dark]
 
 
+class PolarGrid(RectangularGrid):
+    def __init__(self, rows):
+        super.__init__(self, rows, 1)
+
+    def prepare_grid(self):
+        row_height = 1.0/self.rows
+        rows = [PolarCell(0,0)]

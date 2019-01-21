@@ -1,6 +1,6 @@
 import math
 
-from maze.rectangulargrid import RectangularGrid
+from maze.grid import RectangularGrid
 from PIL import Image, ImageDraw
 
 

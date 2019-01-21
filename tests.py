@@ -1,6 +1,6 @@
 import unittest
 
-from maze.rectangulargrid import RectangularGrid
+from maze.grid import RectangularGrid
 
 
 class TestGridMethods(unittest.TestCase):

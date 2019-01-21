@@ -1,5 +1,5 @@
 from maze.formatter import ImageFormatter, StringFormatter
-from maze.rectangulargrid import DistanceGrid
+from maze.grid import DistanceGrid
 from maze.maze_generation import RecursiveBacktracker
 
 if __name__ == '__main__':

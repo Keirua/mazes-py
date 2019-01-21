@@ -1,6 +1,6 @@
 import random
 
-from maze.rectangulargrid import RectangularGrid
+from maze.grid import RectangularGrid
 from abc import ABC, abstractmethod
 
 
