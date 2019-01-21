@@ -23,9 +23,26 @@ class Mask:
 
     def random_cell(self):
         while True:
-            r,c = random.randint(0, self.rows), random.randint(0, self.columns)
+            r, c = random.randint(0, self.rows), random.randint(0, self.columns)
             if self[(r,c)]:
-                return (r, c)
+                return r, c
+
+    @staticmethod
+    def from_file(filename):
+        with open(filename) as f:
+            lines = f.readlines()
+            lines = [l.strip() for l in lines]
+
+            rows = len(lines)
+            cols = len(lines[0])
+            mask = Mask(rows, cols)
+
+            for r in range(rows):
+                for c in range(cols):
+                    if lines[r][c] == 'x':
+                        mask[(r, c)] = False
+
+            return mask
 
 
 class MaskedGrid(Grid):
@@ -34,17 +51,17 @@ class MaskedGrid(Grid):
         super().__init__(mask.rows, mask.columns)
 
     def prepare_grid(self):
-        for l in range(self.rows):
+        for r in range(self.rows):
             line = []
             for c in range(self.columns):
-                if self.mask[(l, c)]:
-                    line.append(Cell(l, c))
+                if self.mask[(r, c)]:
+                    line.append(Cell(r, c))
                 else:
                     line.append(None)
             self.grid.append(line)
 
     def random_cell(self):
-        r,c = self.mask.random_cell()
+        r, c = self.mask.random_cell()
 
         return self.grid[r][c]
 

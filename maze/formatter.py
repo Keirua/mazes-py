@@ -13,7 +13,7 @@ def baseN(num, b, numerals="0123456789abcdefghijklmnopqrstuvwxyz"):
 class StringFormatter:
     @staticmethod
     def to_string(grid: Grid):
-        output = "+" + "---+" * grid.rows + "\n"
+        output = "+" + "---+" * grid.columns + "\n"
         for row in grid.each_rows():
             top = "|"
             bottom = "+"
@@ -38,7 +38,7 @@ class ImageFormatter:
         wall_color = (0, 0, 0)
         background_color = (255, 255, 255)
 
-        im = Image.new("RGB", (1 + grid.rows * cell_size, 1 + grid.columns * cell_size), background_color)
+        im = Image.new("RGB", (1 + grid.columns * cell_size, 1 + grid.rows * cell_size), background_color)
         draw = ImageDraw.Draw(im)
         # font = ImageFont.load_default()
 

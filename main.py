@@ -9,8 +9,8 @@ if __name__ == '__main__':
     # maze_generation_algorithm = Wilson()
     # maze_generation_algorithm = HuntAndKill()
     maze_generation_algorithm = RecursiveBacktracker()
-    rows = 12
-    columns = 12
+    rows = 4
+    columns = 8
     g = DistanceGrid(rows, columns)
 
     maze_generation_algorithm.apply_to(g)

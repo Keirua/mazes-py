@@ -4,12 +4,13 @@ from maze.maze_generation import RecursiveBacktracker
 
 if __name__ == '__main__':
     maze_generation_algorithm = RecursiveBacktracker()
+    # Example
+    # mask = Mask(5,5)
+    # mask[(0, 0)] = False
+    # mask[(2, 2)] = False
+    # mask[(4, 4)] = False
+    mask = Mask.from_file("mask.txt")
 
-    mask = Mask(5,5)
-    mask[(0, 0)] = False
-    mask[(2, 2)] = False
-    mask[(4, 4)] = False
-    print(mask.bits)
     g = MaskedGrid(mask)
 
     maze_generation_algorithm.apply_to(g)
