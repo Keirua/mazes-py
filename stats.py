@@ -1,4 +1,4 @@
-from maze.grid import Grid
+from maze.rectangulargrid import RectangularGrid
 from maze.maze_generation import SideWinder, AldousBroder, Wilson, HuntAndKill, BinaryTree
 import math
 from collections import OrderedDict
@@ -19,7 +19,7 @@ if __name__ == '__main__':
         deadends_count = []
 
         for i in range(attempts):
-            g = Grid(size, size)
+            g = RectangularGrid(size, size)
             algorithm.apply_to(g)
 
             deadends_count.append(len(g.deadends()))

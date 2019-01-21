@@ -1,4 +1,5 @@
 import random
+from abc import ABC, abstractmethod
 
 
 class Distances:
@@ -42,14 +43,10 @@ class Distances:
         self.max_cell = max_cell
 
 
-class Cell:
+class Cell(ABC):
     def __init__(self, row, column):
         self.row = row
         self.column = column
-        self.north = None
-        self.south = None
-        self.west = None
-        self.east = None
         self.links = {}
 
     def get_bounding_box(self, cell_size):
@@ -73,9 +70,9 @@ class Cell:
     def has_link(self, cell):
         return cell in self.links and self.links[cell]
 
+    @abstractmethod
     def neighbors(self):
-        neighbor_list = [self.north, self.south, self.west, self.east]
-        return list(filter(lambda x: x is not None, neighbor_list))
+        pass
 
     def compute_distances(self):
         distances = Distances(self)
@@ -94,7 +91,21 @@ class Cell:
         return distances
 
 
-class Grid:
+class RectangularCell(Cell):
+
+    def __init__(self, row, column):
+        self.north = None
+        self.south = None
+        self.east = None
+        self.west = None
+        super().__init__(row, column)
+
+    def neighbors(self):
+        neighbor_list = [self.north, self.south, self.west, self.east]
+        return list(filter(lambda x: x is not None, neighbor_list))
+
+
+class RectangularGrid:
 
     def __init__(self, rows=10, columns=10):
         self.rows = rows
@@ -107,7 +118,7 @@ class Grid:
         for l in range(self.rows):
             line = []
             for c in range(self.columns):
-                line.append(Cell(l, c))
+                line.append(RectangularCell(l, c))
             self.grid.append(line)
 
     def configure_cells(self):
@@ -145,8 +156,11 @@ class Grid:
                     yield cell
 
     def random_cell(self):
-        random_row = random.choice(self.grid)
-        return random.choice(random_row)
+        cell = None
+        while cell is None:
+            random_row = random.choice(self.grid)
+            cell = random.choice(random_row)
+        return cell
 
     def size(self):
         """The size of the grid"""
@@ -160,7 +174,7 @@ class Grid:
         return deadend_list
 
 
-class DistanceGrid(Grid):
+class DistanceGrid(RectangularGrid):
     def __init__(self, rows=10, columns=10):
         super().__init__(rows, columns)
         self.distances = None

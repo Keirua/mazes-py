@@ -1,6 +1,6 @@
 import random
 
-from maze.grid import Grid, Cell
+from maze.rectangulargrid import RectangularGrid, Cell, RectangularCell
 from PIL import Image
 
 class Mask:
@@ -63,7 +63,7 @@ class Mask:
         return mask
 
 
-class MaskedGrid(Grid):
+class MaskedGrid(RectangularGrid):
     def __init__(self, mask):
         self.mask = mask
         super().__init__(mask.rows, mask.columns)
@@ -73,7 +73,7 @@ class MaskedGrid(Grid):
             line = []
             for c in range(self.columns):
                 if self.mask[(r, c)]:
-                    line.append(Cell(r, c))
+                    line.append(RectangularCell(r, c))
                 else:
                     line.append(None)
             self.grid.append(line)

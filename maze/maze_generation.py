@@ -1,18 +1,18 @@
 import random
 
-from maze.grid import Grid
+from maze.rectangulargrid import RectangularGrid
 from abc import ABC, abstractmethod
 
 
 class MazeGenerationAlgorithm(ABC):
     @abstractmethod
-    def apply_to(self, grid: Grid):
+    def apply_to(self, grid: RectangularGrid):
         pass
 
 
 class BinaryTree(MazeGenerationAlgorithm):
 
-    def apply_to(self, grid: Grid):
+    def apply_to(self, grid: RectangularGrid):
         """The binary tree algorithm applied to our grid"""
         for cell in grid.each_cell():
             neighbors = list(filter(lambda x: x is not None, [cell.north, cell.east]))
@@ -23,7 +23,7 @@ class BinaryTree(MazeGenerationAlgorithm):
 
 class SideWinder(MazeGenerationAlgorithm):
 
-    def apply_to(self, grid: Grid):
+    def apply_to(self, grid: RectangularGrid):
         for row in grid.grid:
             run = []
             for cell in row:
@@ -44,7 +44,7 @@ class SideWinder(MazeGenerationAlgorithm):
 
 class AldousBroder(MazeGenerationAlgorithm):
 
-    def apply_to(self, grid: Grid):
+    def apply_to(self, grid: RectangularGrid):
         cell = grid.random_cell()
         unvisited_count = grid.size() - 1
         while unvisited_count > 0:
@@ -56,7 +56,7 @@ class AldousBroder(MazeGenerationAlgorithm):
 
 
 class Wilson(MazeGenerationAlgorithm):
-    def apply_to(self, grid: Grid):
+    def apply_to(self, grid: RectangularGrid):
         unvisited = [cell for cell in grid.each_cell()]
         first_cell = random.choice(unvisited)
         unvisited.remove(first_cell)
@@ -77,7 +77,7 @@ class Wilson(MazeGenerationAlgorithm):
 
 
 class HuntAndKill(MazeGenerationAlgorithm):
-    def apply_to(self, grid: Grid):
+    def apply_to(self, grid: RectangularGrid):
         current = grid.random_cell()
         while current is not None:
             unvisited_neighbors = list(filter(lambda x: len(x.links.keys()) == 0, current.neighbors()))
@@ -100,7 +100,7 @@ class HuntAndKill(MazeGenerationAlgorithm):
 class RecursiveBacktracker(MazeGenerationAlgorithm):
     """aka depth first search"""
 
-    def apply_to(self, grid: Grid):
+    def apply_to(self, grid: RectangularGrid):
         current = grid.random_cell()
         stack = [current]
 

@@ -1,12 +1,12 @@
 import unittest
 
-from maze.grid import Grid
+from maze.rectangulargrid import RectangularGrid
 
 
 class TestGridMethods(unittest.TestCase):
 
     def test_init(self):
-        g = Grid(4, 4)
+        g = RectangularGrid(4, 4)
         self.assertEqual(g.get_cell(3, 2), g.grid[3][2])
 
         self.assertTrue(g.grid[2][2].north == g.grid[1][2])
@@ -32,7 +32,7 @@ class TestGridMethods(unittest.TestCase):
         self.assertEqual(1, len(g.grid[1][1].links))
 
     def test_distances(self):
-        g = Grid(4, 4)
+        g = RectangularGrid(4, 4)
         g.grid[0][0].link(g.grid[0][1])
         g.grid[0][1].link(g.grid[1][1])
         distances = g.grid[0][0].compute_distances()

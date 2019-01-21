@@ -1,4 +1,4 @@
-from maze.grid import Grid
+from maze.rectangulargrid import RectangularGrid
 from PIL import Image, ImageDraw
 
 
@@ -12,7 +12,7 @@ def baseN(num, b, numerals="0123456789abcdefghijklmnopqrstuvwxyz"):
 
 class StringFormatter:
     @staticmethod
-    def to_string(grid: Grid):
+    def to_string(grid: RectangularGrid):
         output = "+" + "---+" * grid.columns + "\n"
         for row in grid.each_rows():
             top = "|"
@@ -34,7 +34,7 @@ class StringFormatter:
 class ImageFormatter:
 
     @staticmethod
-    def save_image(grid: Grid, filename, cell_size=10):
+    def save_image(grid: RectangularGrid, filename, cell_size=10):
         wall_color = (0, 0, 0)
         background_color = (255, 255, 255)
 
