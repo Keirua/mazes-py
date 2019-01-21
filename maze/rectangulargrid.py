@@ -193,3 +193,5 @@ class DistanceGrid(RectangularGrid):
         dark = int(255 * intensity)
         bright = int(128 + 127 * intensity)
         return [dark, bright, dark]
+
+

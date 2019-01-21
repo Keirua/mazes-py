@@ -5,4 +5,3 @@
  - solving using dijkstra
  - distance colouring
  - masking, from text file or image
- 
