@@ -9,7 +9,8 @@ if __name__ == '__main__':
     # mask[(0, 0)] = False
     # mask[(2, 2)] = False
     # mask[(4, 4)] = False
-    mask = Mask.from_file("mask.txt")
+    # mask = Mask.from_textfile("masks/mask.txt")
+    mask = Mask.from_image("masks/maze-mask.png")
 
     g = MaskedGrid(mask)
 
@@ -18,5 +19,5 @@ if __name__ == '__main__':
     g.distances.compute_max()
 
     print(StringFormatter.to_string(g))
-    ImageFormatter.save_image(g, "masked_maze.png", 30)
+    ImageFormatter.save_image(g, "masked_maze.png")
 

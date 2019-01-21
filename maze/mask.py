@@ -1,7 +1,7 @@
 import random
 
 from maze.grid import Grid, Cell
-
+from PIL import Image
 
 class Mask:
     def __init__(self, rows=10, columns=10):
@@ -28,7 +28,7 @@ class Mask:
                 return r, c
 
     @staticmethod
-    def from_file(filename):
+    def from_textfile(filename):
         with open(filename) as f:
             lines = f.readlines()
             lines = [l.strip() for l in lines]
@@ -43,6 +43,24 @@ class Mask:
                         mask[(r, c)] = False
 
             return mask
+
+    @staticmethod
+    def from_image(filename):
+        img = Image.open(filename)
+        print(img.getcolors())
+
+        cols, rows = img.size
+        mask = Mask(rows, cols)
+
+        print(img.size)
+
+        for r in range(rows):
+            for c in range(cols):
+                pixel = img.getpixel((c, r))
+                if pixel == (0, 0, 0, 255):
+                    mask[(r, c)] = False
+
+        return mask
 
 
 class MaskedGrid(Grid):
