@@ -92,17 +92,20 @@ class PolarGridImageFormatter:
             theta_ccw = cell.column * theta
             theta_cw = (cell.column + 1) * theta
 
-            ax = center + int(inner_radius * math.cos(theta_ccw))
-            ay = center + int(inner_radius * math.sin(theta_ccw))
-            bx = center + int(outer_radius * math.cos(theta_ccw))
-            by = center + int(outer_radius * math.sin(theta_ccw))
             cx = center + int(inner_radius * math.cos(theta_cw))
             cy = center + int(inner_radius * math.sin(theta_cw))
             dx = center + int(outer_radius * math.cos(theta_cw))
             dy = center + int(outer_radius * math.sin(theta_cw))
 
+            ax, ay = center - inner_radius, center - inner_radius
+            bx, by = center + inner_radius, center + inner_radius
             if cell.has_link(cell.inward):
-                draw.line((ax, ay, cx, cy), fill=wall_color)
+                draw.arc(
+                    (ax, ay, bx, by),
+                    theta_ccw * 180 / math.pi,
+                    theta_cw * 180 / math.pi,
+                    fill=wall_color)
+
             if cell.has_link(cell.cw):
                 draw.line((cx, cy, dx, dy), fill=wall_color)
             draw.arc((0, 0, image_size, image_size), 0, 360, fill=wall_color)
