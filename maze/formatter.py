@@ -84,6 +84,8 @@ class PolarGridImageFormatter:
         draw = ImageDraw.Draw(im)
 
         for cell in grid.each_cell():
+            if cell.row == 0:
+                continue
             theta = 2 * math.pi / len(grid.grid[cell.row])
             inner_radius = cell.row * cell_size
             outer_radius = (1 + cell.row) * cell_size
@@ -99,9 +101,9 @@ class PolarGridImageFormatter:
             dx = center + int(outer_radius * math.cos(theta_cw))
             dy = center + int(outer_radius * math.sin(theta_cw))
 
-            if cell.has_link(cell.north):
+            if cell.has_link(cell.inward):
                 draw.line((ax, ay, cx, cy), fill=wall_color)
-            if cell.has_link(cell.east):
+            if cell.has_link(cell.cw):
                 draw.line((cx, cy, dx, dy), fill=wall_color)
             draw.arc((0, 0, image_size, image_size), 0, 360, fill=wall_color)
 

@@ -1,6 +1,6 @@
 import random
 
-from maze.grid import RectangularGrid
+from maze.grid import RectangularGrid, Grid
 from abc import ABC, abstractmethod
 
 
@@ -100,7 +100,7 @@ class HuntAndKill(MazeGenerationAlgorithm):
 class RecursiveBacktracker(MazeGenerationAlgorithm):
     """aka depth first search"""
 
-    def apply_to(self, grid: RectangularGrid):
+    def apply_to(self, grid: Grid):
         current = grid.random_cell()
         stack = [current]
 

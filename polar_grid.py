@@ -1,11 +1,11 @@
-from maze.formatter import ImageFormatter, StringFormatter, PolarGridImageFormatter
-from maze.grid import DistanceGrid, RectangularGrid
+from maze.formatter import PolarGridImageFormatter
+from maze.grid import PolarGrid
 from maze.maze_generation import RecursiveBacktracker
 
 if __name__ == '__main__':
     maze_generation_algorithm = RecursiveBacktracker()
 
-    g = RectangularGrid(8, 8)
+    g = PolarGrid(8)
 
     maze_generation_algorithm.apply_to(g)
 
