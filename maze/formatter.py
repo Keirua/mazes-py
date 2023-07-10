@@ -64,9 +64,9 @@ class ImageFormatter:
             if not cell.has_link(cell.south):
                 draw.line((x1, y2, x2, y2), fill=wall_color)
 
-            text_width, text_height = draw.textsize(str(grid.content_of(cell)))
-            text_coords = (x1 + cell_size / 2 - text_width / 2, y1 + cell_size / 2 - text_height / 2)
-            draw.text(text_coords, str(grid.content_of(cell)), fill=wall_color)
+            # text_width, text_height = draw.textsize(str(grid.content_of(cell)))
+            # text_coords = (x1 + cell_size / 2 - text_width / 2, y1 + cell_size / 2 - text_height / 2)
+            # draw.text(text_coords, str(grid.content_of(cell)), fill=wall_color)
 
         im.save(filename, "PNG")
 
@@ -111,3 +111,4 @@ class PolarGridImageFormatter:
             draw.arc((0, 0, image_size, image_size), 0, 360, fill=wall_color)
 
         im.save(filename, "PNG")
+        

@@ -9,8 +9,8 @@ if __name__ == '__main__':
     # mask[(0, 0)] = False
     # mask[(2, 2)] = False
     # mask[(4, 4)] = False
-    # mask = Mask.from_textfile("masks/mask.txt")
-    mask = Mask.from_image("masks/maze-mask.png")
+    mask = Mask.from_textfile("masks/mask.txt")
+    # mask = Mask.from_image("masks/maze-mask.png")
 
     g = MaskedGrid(mask)
 
