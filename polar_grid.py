@@ -9,6 +9,6 @@ if __name__ == '__main__':
 
     maze_generation_algorithm.apply_to(g)
 
-    PolarGridImageFormatter.save_image(g, "maze-polar.png", 30)
+    PolarGridImageFormatter.save_image(g, "out/maze-polar.png", 30)
 
 

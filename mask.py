@@ -19,5 +19,5 @@ if __name__ == '__main__':
     g.distances.compute_max()
 
     print(StringFormatter.to_string(g))
-    ImageFormatter.save_image(g, "masked_maze.png")
+    ImageFormatter.save_image(g, "out/masked_maze.png")
 

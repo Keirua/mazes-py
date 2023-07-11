@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "mazes-py"
+version = "0.1.0"
+description = "My experiments with maze generation"
+authors = ["Clemkeirua <clement@keiruaprod.fr>"]
+
+[tool.poetry.dependencies]
+python = "3.10.0"
+Pillow = "10.0.0"
+
+
+[tool.poetry.dev-dependencies]
+black = "^22.10.0"
+hypothesis = "^6.30.1"
+isort = "^5.12.0"
+mypy = "^1.3"
+mypy-protobuf = "^3.0.0"
+parametrize = "^0.1.1"
+pytest = "^7.2.2"
+pytest-cov = "^3.0.0"
+pytest-env = "~0.6.2"
+pytest-randomly = "^3.10.3"
+pytest-rerunfailures = "^10.1"
+pytest-xdist = "^2.5.0"
+
+[build-system]
+requires = ["poetry-core>=1.2.1"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 120
+target-version = ['py39']
+exclude = 'vendors'
+
+[tool.isort]
+profile = "black"
+src_paths = ["squirrel", "tests"]
+
+[tool.mypy]
+strict_optional = "false"
+ignore_missing_imports = "true"

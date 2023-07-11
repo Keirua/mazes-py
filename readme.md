@@ -5,3 +5,10 @@
  - solving using dijkstra
  - distance colouring
  - masking, from text file or image
+
+# Todo:
+
+ - Uniformize the codebase 
+ - Triangle Grid
+ - Hex Grid
+ - Upsilon maze

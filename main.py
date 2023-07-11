@@ -18,7 +18,7 @@ if __name__ == '__main__':
     g.distances.compute_max()
 
     print(StringFormatter.to_string(g))
-    ImageFormatter.save_image(g, "maze.png", 30)
+    ImageFormatter.save_image(g, "out/maze.png", 30)
 
     g.distances = g.distances.path_to(g.grid[rows-1][0])
     print(StringFormatter.to_string(g))
