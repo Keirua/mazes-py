@@ -1,3 +1,10 @@
+# Setup
+
+```bash
+just install
+poetry run python main.py
+```
+
 # done
 
  - various maze generation algorithm

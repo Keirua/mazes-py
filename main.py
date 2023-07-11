@@ -2,7 +2,7 @@ from maze.formatter import ImageFormatter, StringFormatter
 from maze.grid import DistanceGrid
 from maze.maze_generation import RecursiveBacktracker
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # maze_generation_algorithm = BinaryTree()
     # maze_generation_algorithm = SideWinder()
     # maze_generation_algorithm = AldousBroder()
@@ -20,6 +20,5 @@ if __name__ == '__main__':
     print(StringFormatter.to_string(g))
     ImageFormatter.save_image(g, "out/maze.png", 30)
 
-    g.distances = g.distances.path_to(g.grid[rows-1][0])
+    g.distances = g.distances.path_to(g.grid[rows - 1][0])
     print(StringFormatter.to_string(g))
-

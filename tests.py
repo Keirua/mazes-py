@@ -1,10 +1,9 @@
 import unittest
 
-from maze.grid import RectangularGrid, PolarGrid
+from maze.grid import PolarGrid, RectangularGrid
 
 
 class TestGridMethods(unittest.TestCase):
-
     def test_init(self):
         g = RectangularGrid(4, 4)
         self.assertEqual(g.get_cell(3, 2), g.grid[3][2])
@@ -60,8 +59,8 @@ class TestGridMethods(unittest.TestCase):
         self.assertTrue(len(c1.outwards) > 0)
         c2 = p.get_cell(1, 0)
 
-        #self.assertEqual(c2.ccw, p.get_cell(1, 7))
-        #self.assertIsNotNone(c2.ccw)
+        # self.assertEqual(c2.ccw, p.get_cell(1, 7))
+        # self.assertIsNotNone(c2.ccw)
         self.assertEqual(c2.cw, p.get_cell(1, 1))
         self.assertIsNotNone(c2.cw)
         self.assertIsNotNone(c2.inward)
@@ -70,5 +69,6 @@ class TestGridMethods(unittest.TestCase):
         self.assertIn(p.get_cell(2, 0), c2.outwards)
         self.assertIn(p.get_cell(2, 1), c2.outwards)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

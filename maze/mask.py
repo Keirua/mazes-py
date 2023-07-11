@@ -1,7 +1,9 @@
 import random
 
-from maze.grid import RectangularGrid, Cell, RectangularCell
 from PIL import Image
+
+from maze.grid import Cell, RectangularCell, RectangularGrid
+
 
 class Mask:
     def __init__(self, rows=10, columns=10):
@@ -24,7 +26,7 @@ class Mask:
     def random_cell(self):
         while True:
             r, c = random.randint(0, self.rows), random.randint(0, self.columns)
-            if self[(r,c)]:
+            if self[(r, c)]:
                 return r, c
 
     @staticmethod
@@ -39,7 +41,7 @@ class Mask:
 
             for r in range(rows):
                 for c in range(cols):
-                    if lines[r][c] == 'x':
+                    if lines[r][c] == "x":
                         mask[(r, c)] = False
 
             return mask
@@ -82,4 +84,3 @@ class MaskedGrid(RectangularGrid):
         r, c = self.mask.random_cell()
 
         return self.grid[r][c]
-

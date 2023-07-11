@@ -1,7 +1,12 @@
 import math
 
-from maze.grid import RectangularGrid
 from PIL import Image, ImageDraw
+
+from maze.grid import RectangularGrid, TriangleGrid
+
+RGB_BLACK = (0, 0, 0)
+
+RGB_WHITE = (255, 255, 255)
 
 
 # taken here
@@ -34,7 +39,6 @@ class StringFormatter:
 
 
 class ImageFormatter:
-
     @staticmethod
     def save_image(grid: RectangularGrid, filename, cell_size=10):
         wall_color = (0, 0, 0)
@@ -72,11 +76,10 @@ class ImageFormatter:
 
 
 class PolarGridImageFormatter:
-
     @staticmethod
     def save_image(grid: RectangularGrid, filename, cell_size=10):
-        wall_color = (0, 0, 0)
-        background_color = (255, 255, 255)
+        wall_color = RGB_BLACK
+        background_color = RGB_WHITE
         image_size = 2 * grid.rows * cell_size
         center = image_size / 2
 
@@ -100,15 +103,53 @@ class PolarGridImageFormatter:
             ax, ay = center - inner_radius, center - inner_radius
             bx, by = center + inner_radius, center + inner_radius
             if cell.has_link(cell.inward):
-                draw.arc(
-                    (ax, ay, bx, by),
-                    theta_ccw * 180 / math.pi,
-                    theta_cw * 180 / math.pi,
-                    fill=wall_color)
+                draw.arc((ax, ay, bx, by), theta_ccw * 180 / math.pi, theta_cw * 180 / math.pi, fill=wall_color)
 
             if cell.has_link(cell.cw):
                 draw.line((cx, cy, dx, dy), fill=wall_color)
             draw.arc((0, 0, image_size, image_size), 0, 360, fill=wall_color)
 
         im.save(filename, "PNG")
-        
+
+
+class TriangleGridImageFormatter:
+    @staticmethod
+    def save_image(grid: TriangleGrid, filename, cell_size=10):
+        half_width = cell_size / 2.0
+        height = cell_size * math.sqrt(3) / 2.0
+        half_height = height / 2.0
+
+        wall_color = RGB_BLACK
+        background_color = RGB_WHITE
+        image_width = int(cell_size * (grid.columns + 1) / 2.0)
+        image_height = int(height * grid.rows)
+
+        im = Image.new("RGB", (1 + image_width, 1 + image_height), background_color)
+        draw = ImageDraw.Draw(im)
+
+        for cell in grid.each_cell():
+            cx = half_width + cell.column * half_width
+            cy = half_height + cell.row * height
+            west_x = int(cx - half_width)
+            mid_x = int(cx)
+            east_x = int(cx + half_width)
+
+            apex_y = int(cy + half_height)
+            base_y = int(cy - half_height)
+            if cell.is_upright:
+                apex_y = int(cy - half_height)
+                base_y = int(cy + half_height)
+            # points = [(west_x, base_y), (mid_x, apex_y), (east_x, base_y)]
+            # draw.polygon(points)
+
+            if not cell.west:
+                draw.line((west_x, base_y, mid_x, apex_y), fill=wall_color)
+            if not cell.has_link(cell.east):
+                draw.line((east_x, base_y, mid_x, apex_y), fill=wall_color)
+            no_south = cell.is_upright and cell.south is None
+            not_linked = not cell.is_upright and not cell.has_link(cell.north)
+
+            if no_south or not_linked:
+                draw.line((east_x, base_y, west_x, base_y), fill=wall_color)
+
+        im.save(filename, "PNG")

@@ -2,7 +2,6 @@ from maze.grid.cell import Cell
 
 
 class PolarCell(Cell):
-
     def __init__(self, row, column):
         super().__init__(row, column)
         self.outwards = []

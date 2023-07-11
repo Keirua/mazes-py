@@ -1,17 +1,15 @@
 import random
+from abc import ABC
 
-from maze.grid import RectangularGrid, Grid
-from abc import ABC, abstractmethod
+from maze.grid import Grid, RectangularGrid
 
 
 class MazeGenerationAlgorithm(ABC):
-    @abstractmethod
     def apply_to(self, grid: RectangularGrid):
         pass
 
 
 class BinaryTree(MazeGenerationAlgorithm):
-
     def apply_to(self, grid: RectangularGrid):
         """The binary tree algorithm applied to our grid"""
         for cell in grid.each_cell():
@@ -22,7 +20,6 @@ class BinaryTree(MazeGenerationAlgorithm):
 
 
 class SideWinder(MazeGenerationAlgorithm):
-
     def apply_to(self, grid: RectangularGrid):
         for row in grid.grid:
             run = []
@@ -43,7 +40,6 @@ class SideWinder(MazeGenerationAlgorithm):
 
 
 class AldousBroder(MazeGenerationAlgorithm):
-
     def apply_to(self, grid: RectangularGrid):
         cell = grid.random_cell()
         unvisited_count = grid.size() - 1
@@ -67,7 +63,7 @@ class Wilson(MazeGenerationAlgorithm):
             while cell in unvisited:
                 cell = random.choice(cell.neighbors())
                 if cell in path:
-                    path = path[0:path.index(cell) + 1]
+                    path = path[0 : path.index(cell) + 1]
                 else:
                     path.append(cell)
 

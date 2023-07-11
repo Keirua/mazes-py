@@ -13,7 +13,7 @@ class PolarGrid(Grid):
 
     def get_cell(self, row, column):
         """Return the cell at the requested coordinate"""
-        if 0 <= row < self.rows and 0 <= column: #< len(self.grid[row]):
+        if 0 <= row < self.rows and 0 <= column:  # < len(self.grid[row]):
             return self.grid[row][column % len(self.grid[row])]
         return None
 

@@ -1,5 +1,7 @@
 from abc import ABC
 
+from maze.distance import Distances
+
 
 class Cell(ABC):
     def __init__(self, row, column):
@@ -20,11 +22,9 @@ class Cell(ABC):
     def has_link(self, cell):
         return cell in self.links and self.links[cell]
 
-    @abstractmethod
     def neighbors(self):
         pass
 
-    @abstractmethod
     def get_bounding_box(self, cell_size):
         pass
 

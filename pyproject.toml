@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mazes-py"
+name = "mazes_py"
 version = "0.1.0"
 description = "My experiments with maze generation"
 authors = ["Clemkeirua <clement@keiruaprod.fr>"]
@@ -31,11 +31,10 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 120
 target-version = ['py39']
-exclude = 'vendors'
 
 [tool.isort]
 profile = "black"
-src_paths = ["squirrel", "tests"]
+src_paths = ["maze"]
 
 [tool.mypy]
 strict_optional = "false"

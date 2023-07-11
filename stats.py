@@ -1,16 +1,17 @@
-from maze.grid import RectangularGrid
-from maze.maze_generation import SideWinder, AldousBroder, Wilson, HuntAndKill, BinaryTree
 import math
 from collections import OrderedDict
 
-if __name__ == '__main__':
-    algorithms = [
-        BinaryTree(),
-        SideWinder(),
-        AldousBroder(),
-        Wilson(),
-        HuntAndKill()
-    ]
+from maze.grid import RectangularGrid
+from maze.maze_generation import (
+    AldousBroder,
+    BinaryTree,
+    HuntAndKill,
+    SideWinder,
+    Wilson,
+)
+
+if __name__ == "__main__":
+    algorithms = [BinaryTree(), SideWinder(), AldousBroder(), Wilson(), HuntAndKill()]
     size = 20
     attempts = 100
     averages = OrderedDict()
@@ -27,5 +28,5 @@ if __name__ == '__main__':
         averages[algorithm.__class__.__name__] = int(avg)
 
     for k, v in averages.items():
-        percentage = int((100. * v)/(size * size))
-        print("{} : {}/{} ({}%)".format(k.ljust(12, ' '), str(v).rjust(3, ' '), size * size, str(percentage).rjust(2)))
+        percentage = int((100.0 * v) / (size * size))
+        print("{} : {}/{} ({}%)".format(k.ljust(12, " "), str(v).rjust(3, " "), size * size, str(percentage).rjust(2)))

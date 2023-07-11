@@ -1,8 +1,8 @@
 from maze.formatter import ImageFormatter, StringFormatter
-from maze.mask import MaskedGrid, Mask
+from maze.mask import Mask, MaskedGrid
 from maze.maze_generation import RecursiveBacktracker
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     maze_generation_algorithm = RecursiveBacktracker()
     # Example
     # mask = Mask(5,5)
@@ -20,4 +20,3 @@ if __name__ == '__main__':
 
     print(StringFormatter.to_string(g))
     ImageFormatter.save_image(g, "out/masked_maze.png")
-

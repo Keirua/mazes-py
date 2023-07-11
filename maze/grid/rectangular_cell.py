@@ -1,6 +1,7 @@
+from maze.grid import Cell
+
 
 class RectangularCell(Cell):
-
     def __init__(self, row, column):
         self.north = None
         self.south = None

@@ -3,8 +3,7 @@ from abc import ABC, abstractmethod
 
 
 class Grid(ABC):
-
-    def __init__(self, rows=10, columns=10):
+    def __init__(self, rows: int = 10, columns: int = 10):
         self.rows = rows
         self.columns = columns
         self.grid = []

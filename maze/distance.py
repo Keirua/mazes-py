@@ -1,11 +1,7 @@
-
 class Distances:
-
     def __init__(self, root_node):
         self.root = root_node
-        self.cells = {
-            self.root: 0
-        }
+        self.cells = {self.root: 0}
 
     def __getitem__(self, item):
         return self.cells[item]
