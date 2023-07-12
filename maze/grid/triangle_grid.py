@@ -44,7 +44,5 @@ class TriangleWithTriangularShapeGrid(TriangleWithRectangularShapeGrid):
 
     def prepare_grid(self):
         for l in range(math.ceil(self.size / 2)):
-            line = []
             for c in range(l, self.size - l):
-                line.append(TriangleCell(self.size - l - 1, c))
-            self.grid.append(line)
+                self.grid[self.size - l - 1][c] = TriangleCell(self.size - l - 1, c)

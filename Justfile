@@ -9,6 +9,9 @@ fmt:
 mypy:
     @poetry run mypy *.py maze/*.py
 
+test:
+    @poetry run python tests.py
+
 run-all:
     @poetry run python tests.py
     @poetry run python main.py
