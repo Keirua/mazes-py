@@ -2,7 +2,7 @@ import math
 
 from PIL import Image, ImageDraw
 
-from maze.grid import RectangularGrid, TriangleGrid
+from maze.grid import RectangularGrid, TriangleWithRectangularShapeGrid
 
 RGB_BLACK = (0, 0, 0)
 
@@ -114,7 +114,7 @@ class PolarGridImageFormatter:
 
 class TriangleGridImageFormatter:
     @staticmethod
-    def save_image(grid: TriangleGrid, filename, cell_size=10):
+    def save_image(grid: TriangleWithRectangularShapeGrid, filename, cell_size=10):
         half_width = cell_size / 2.0
         height = cell_size * math.sqrt(3) / 2.0
         half_height = height / 2.0
