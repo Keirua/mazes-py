@@ -59,7 +59,7 @@ class Mask:
         for r in range(rows):
             for c in range(cols):
                 pixel = img.getpixel((c, r))
-                if pixel == (0, 0, 0, 255):
+                if pixel == (255, 255, 255):
                     mask[(r, c)] = False
 
         return mask

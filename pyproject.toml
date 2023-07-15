@@ -7,6 +7,7 @@ authors = ["Clemkeirua <clement@keiruaprod.fr>"]
 [tool.poetry.dependencies]
 python = "3.10.0"
 Pillow = "10.0.0"
+opencv-python = "^4.8.0.74"
 
 
 [tool.poetry.dev-dependencies]
