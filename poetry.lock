@@ -697,6 +697,18 @@ files = [
 ]
 
 [[package]]
+name = "svgwrite"
+version = "1.4.3"
+description = "A Python library to create SVG drawings."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "svgwrite-1.4.3-py3-none-any.whl", hash = "sha256:bb6b2b5450f1edbfa597d924f9ac2dd099e625562e492021d7dd614f65f8a22d"},
+    {file = "svgwrite-1.4.3.zip", hash = "sha256:a8fbdfd4443302a6619a7f76bc937fc683daf2628d9b737c891ec08b8ce524c3"},
+]
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -735,4 +747,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.0"
-content-hash = "9434d30f77699187ad63575b14df5a2e86c96aa2c181c3462ad83291a04a0758"
+content-hash = "6dbafbdb56c112bbad23f7e1ff46ebe66ce6b220503e730b0bfed7a542b22d93"

@@ -1,13 +1,12 @@
 import math
 from dataclasses import dataclass
 from typing import List
-
+import os
 from PIL import Image, ImageDraw
-
+import svgwrite
 from maze.grid import RectangularGrid, TriangleWithRectangularShapeGrid
 
 RGB_BLACK = (0, 0, 0)
-
 RGB_WHITE = (255, 255, 255)
 
 
@@ -120,8 +119,11 @@ class ShapeFormatter:
 
 
 class ImageSaver:
-    def save_image(self, shapes: List[Shape], filename):
-        pass
+    def save_image(self, shapes: List[Shape], filename: str):
+        """
+        Save the actual image to a file
+        """
+        raise NotImplemented
 
 
 class PNGImageSaver(ImageSaver):
@@ -138,6 +140,34 @@ class PNGImageSaver(ImageSaver):
                 draw.line((shape.x1, shape.y1, shape.x2, shape.y2), fill=wall_color)
 
         im.save(filename, "PNG")
+
+
+class SVGImageSaver(ImageSaver):
+    def save_image(self, shapes: List[Shape], bbox: BoundingBox, filename: str):
+        dwg = svgwrite.Drawing(filename, profile='tiny')
+
+        wall_color = svgwrite.rgb(0, 0, 0, '%')
+        for shape in shapes:
+            if type(shape) == Line:
+                shape: Line = shape
+                dwg.add(dwg.line((shape.x1, shape.y1), (shape.x2, shape.y2), stroke=wall_color))
+
+        dwg.save()
+
+
+class ImageSaverFactory:
+    @staticmethod
+    def create(filename: str) -> ImageSaver:
+        mapping = {
+            ".svg": SVGImageSaver,
+            ".png": PNGImageSaver
+        }
+        path, extension = os.path.splitext(filename)
+        if extension.lower() in mapping.keys():
+            return mapping[extension.lower()]()
+
+        raise ValueError(f"output format for {extension} is not supported")
+
 
 
 class PolarGridImageFormatter:
