@@ -13,7 +13,7 @@ else:
 image = cv2.imread(f"pokemon/{filename}", cv2.IMREAD_UNCHANGED)
 
 # Create a mask for alpha pixels with alpha = 255
-mask = (image[:, :, 3] == 255)
+mask = image[:, :, 3] == 255
 
 # Create a black image with the same size as the input image
 output = np.zeros_like(image[:, :, :3])

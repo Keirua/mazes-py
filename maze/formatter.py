@@ -1,4 +1,6 @@
 import math
+from dataclasses import dataclass
+from typing import List
 
 from PIL import Image, ImageDraw
 
@@ -71,6 +73,69 @@ class ImageFormatter:
             # text_width, text_height = draw.textsize(str(grid.content_of(cell)))
             # text_coords = (x1 + cell_size / 2 - text_width / 2, y1 + cell_size / 2 - text_height / 2)
             # draw.text(text_coords, str(grid.content_of(cell)), fill=wall_color)
+
+        im.save(filename, "PNG")
+
+
+class Shape:
+    pass
+
+
+@dataclass
+class BoundingBox(Shape):
+    x_min: int
+    y_min: int
+    x_max: int
+    y_max: int
+
+
+@dataclass
+class Line(Shape):
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+
+
+class ShapeFormatter:
+    @staticmethod
+    def save_image(grid: RectangularGrid, cell_size=10) -> (List[Shape], BoundingBox):
+        walls: List[Shape] = []
+        bbox = BoundingBox(x_min=0, y_min=0, x_max=1 + grid.columns * cell_size, y_max=1 + grid.rows * cell_size)
+
+        # Then we draw the cell borders and content
+        for cell in grid.each_cell():
+            x1, y1, x2, y2 = cell.get_bounding_box(cell_size)
+
+            if not cell.north:
+                walls.append(Line(x1=x1, y1=y1, x2=x2, y2=y1))
+            if not cell.west:
+                walls.append(Line(x1=x1, y1=y1, x2=x1, y2=y2))
+            if not cell.has_link(cell.east):
+                walls.append(Line(x1=x2, y1=y1, x2=x2, y2=y2))
+            if not cell.has_link(cell.south):
+                walls.append(Line(x1=x1, y1=y2, x2=x2, y2=y2))
+
+        return walls, bbox
+
+
+class ImageSaver:
+    def save_image(self, shapes: List[Shape], filename):
+        pass
+
+
+class PNGImageSaver(ImageSaver):
+    def save_image(self, shapes: List[Shape], bbox: BoundingBox, filename: str):
+        wall_color = (0, 0, 0)
+        background_color = (255, 255, 255)
+
+        im = Image.new("RGB", (bbox.x_max, bbox.y_max), background_color)
+        draw = ImageDraw.Draw(im)
+
+        for shape in shapes:
+            if type(shape) == Line:
+                shape: Line = shape
+                draw.line((shape.x1, shape.y1, shape.x2, shape.y2), fill=wall_color)
 
         im.save(filename, "PNG")
 

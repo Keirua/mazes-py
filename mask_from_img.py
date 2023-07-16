@@ -1,11 +1,10 @@
 import sys
 
+import cv2
+
 from maze.formatter import ImageFormatter, StringFormatter
 from maze.mask import Mask, MaskedGrid
 from maze.maze_generation import RecursiveBacktracker
-
-
-import cv2
 
 
 def write_img_b_in_a_and_scale_it_down(image_a, image_b, scale_factor=0.5):
@@ -25,7 +24,7 @@ def write_img_b_in_a_and_scale_it_down(image_a, image_b, scale_factor=0.5):
     mask = alpha_channel > 0
 
     # Place the scaled image b on image a, ignoring transparent pixels
-    image_a[y_offset:y_offset + height_b, x_offset:x_offset + width_b][mask] = scaled_image_b[:, :, :3][mask]
+    image_a[y_offset : y_offset + height_b, x_offset : x_offset + width_b][mask] = scaled_image_b[:, :, :3][mask]
 
     return image_a
 
@@ -44,7 +43,6 @@ if __name__ == "__main__":
     maze_generation_algorithm.apply_to(g)
     g.distances = g.random_cell().compute_distances()
     g.distances.compute_max()
-
 
     # print(StringFormatter.to_string(g))
     maze_filename = f"out/masked_maze_{img_id}"
