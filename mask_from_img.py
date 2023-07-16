@@ -20,8 +20,12 @@ def write_img_b_in_a_and_scale_it_down(image_a, image_b, scale_factor=0.5):
     x_offset = width_a - width_b
     y_offset = 0
 
-    # Place the scaled image b on image a
-    image_a[y_offset:y_offset+height_b, x_offset:x_offset+width_b] = scaled_image_b
+    # Create a mask for transparent pixels in image b
+    alpha_channel = scaled_image_b[:, :, 3]
+    mask = alpha_channel > 0
+
+    # Place the scaled image b on image a, ignoring transparent pixels
+    image_a[y_offset:y_offset + height_b, x_offset:x_offset + width_b][mask] = scaled_image_b[:, :, :3][mask]
 
     return image_a
 
@@ -47,6 +51,6 @@ if __name__ == "__main__":
     ImageFormatter.save_image(g, maze_filename)
 
     maze_image = cv2.imread(maze_filename)
-    initial_image = cv2.imread(f"pokemon/{img_id}")
+    initial_image = cv2.imread(f"pokemon/{img_id}", cv2.IMREAD_UNCHANGED)
     out = write_img_b_in_a_and_scale_it_down(maze_image, initial_image, 0.5)
     cv2.imwrite(maze_filename, out)
